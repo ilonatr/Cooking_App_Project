@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf8">
+    <title>Example</title>
+    <link href="./css/style2.css" rel="stylesheet">
+</head>
+<body>
+<div class="container">
+    <h1>List of photos</h1>
+    <ul>
+        <!-- js creates list here -->
+    </ul>
+    <hr>
+    <div class="forms">
+        <div class="form-wrapper">
+            <h3>Add user</h3>
+            <form action="http://localhost:3000/user" method="post" class="light-border" id="addUserForm">
+                <input class="light-border" type="text" name="username" pattern=".{3,}" placeholder="Username" required>
+                <input class="light-border" type="password" name="password" pattern="(?=.*[A-Z]).{8,}" placeholder="Password" required>
+                <input class="light-border" type="text" name="name" pattern=".{3,}" placeholder="Name" required>
+                <input class="light-border" type="email" name="email" placeholder="email" required>
+                <input class="light-border" type="file" name="avatar" accept="image/*" placeholder="Choose avatar">
+                <button class="light-border" type="submit">Save</button>
+            </form>
+        </div>
+
+        <div class="form-wrapper">
+            <h3>Add photo</h3>
+            <form action="http://localhost:3000/photo"
+                  method="post"
+                  class="light-border"
+                  enctype="multipart/form-data"
+                  id="addPhotoForm">
+                <input class="light-border" type="file" name="photo" accept="image/*" placeholder="Choose file">
+                <select class="light-border add-owner" name="owner" required></select>
+                <input class="light-border" type="text" name="caption" placeholder="Caption" required>
+                <button class="light-border" type="submit">Upload</button>
+            </form>
+        </div>
+
+        <div class="form-wrapper">
+            <h3>Modify photo</h3>
+            <form action="http://localhost:3000/photo" id="modPhotoForm" class="light-border">
+                <input class="light-border" type="text" name="name" placeholder="Name" required>
+                <select class="light-border add-owner" name="owner" required="Owner" required>
+                <option value="">Select owner</option>
+                <input class="light-border" type="text" name="caption" placeholder="Caption" required>
+                </select>
+                <input type="hidden" name="id">
+                <button class="light-border" type="submit">Save changes</button>
+            </form>
+        </div>
+    </div>
+</div>
+<script src="./js/serialize.js"></script>
+<script src="./js/main2.js"></script>
+</body>
+</html>
