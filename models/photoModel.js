@@ -2,9 +2,15 @@
 //const pool = require('../database/db');
 const promisePool = require('../database/db').promise();
 
-const getAllPhotos = async () => {
+const getAllPhotos = async (uid) => {
   try {
-    const [rows] = await promisePool.query('SELECT photos.id, filename, owner, caption, timestamp, users.id, users.name AS ownername FROM photos LEFT JOIN users ON owner = users.id');
+    const [rows] = await promisePool.query('SELECT photos.id, filename, owner, caption, timestamp, users.id AS user_id, users.name AS ownername FROM photos LEFT JOIN users ON owner = users.id');
+    rows.map((row) => {
+      if (uid == row.user_id) {
+        row.editable = true
+      }
+     })
+
     return rows;
   } catch (e) {
     console.error('error', e.message);
@@ -33,7 +39,7 @@ const insertPhoto = async (photo) => {
 const updatePhoto = async (photo) => {
   try {
     console.log('insert photo?', photo);
-    const [rows] = await promisePool.query('UPDATE photos SET caption = ? WHERE id = ?', [ photo.caption, photo.id ]);
+    const [rows] = await promisePool.query('UPDATE photos SET caption = ? WHERE photos.id = ?', [ photo.caption, photo.id ]);
     return rows;
   } catch (e) {
     console.error('updatePhoto model crash', e.message);
@@ -42,7 +48,7 @@ const updatePhoto = async (photo) => {
 
 const deletePhoto = async (id) => {
   try {
-    console.log('delete cat', id);
+    console.log('delete photo', id);
     const [rows] = await promisePool.query('DELETE FROM photos WHERE photos.id = ?', [ id ]);
     console.log('deleted?', rows);
     return rows;

@@ -15,7 +15,7 @@
     <div class="forms">
         <div class="form-wrapper">
             <h3>Add user</h3>
-            <form action="http://localhost:3000/user" method="post" class="light-border" id="addUserForm">
+            <form action="http://localhost:3000/auth/register" method="post" class="light-border" id="addUserForm" enctype="multipart/form-data">
                 <input class="light-border" type="text" name="username" pattern=".{3,}" placeholder="Username" required>
                 <input class="light-border" type="password" name="password" pattern="(?=.*[A-Z]).{8,}" placeholder="Password" required>
                 <input class="light-border" type="text" name="name" pattern=".{3,}" placeholder="Name" required>
@@ -40,17 +40,30 @@
         </div>
 
         <div class="form-wrapper">
-            <h3>Modify photo</h3>
-            <form action="http://localhost:3000/photo" id="modPhotoForm" class="light-border">
-                <input class="light-border" type="text" name="name" placeholder="Name" required>
-                <select class="light-border add-owner" name="owner" required="Owner" required>
+        <h3>Modify photo</h3>
+        <form action="http://localhost:3000/photo" id="modPhotoForm" class="light-border">
+            <input class="light-border" type="text" name="name" placeholder="Name" required>
+            <select class="light-border add-owner" name="owner" required="Owner" required>
                 <option value="">Select owner</option>
                 <input class="light-border" type="text" name="caption" placeholder="Caption" required>
+            </select>
+            <input type="hidden" name="id">
+            <button class="light-border" type="submit">Save changes</button>
+        </form>
+    </div>
+        <!--<div class="form-wrapper">
+            <h3>Modify photo</h3>
+            <form action="http://localhost:3000/cat" id="modCatForm" class="light-border">
+                <input class="light-border" type="text" name="name" placeholder="Name" required>
+                <input class="light-border" type="number" name="age" placeholder="Age" required>
+                <input class="light-border" type="number" step="0.1" name="weight" placeholder="Weight" required>
+                <select class="light-border add-owner" name="owner" required>
+                    <option value="">Select owner</option>
                 </select>
                 <input type="hidden" name="id">
                 <button class="light-border" type="submit">Save changes</button>
             </form>
-        </div>
+        </div>-->
     </div>
 </div>
 <script src="./js/serialize.js"></script>

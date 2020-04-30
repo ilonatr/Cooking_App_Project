@@ -17,7 +17,7 @@ CREATE TABLE photos (
     owner  INTEGER NOT NULL,
     timestamp Timestamp,
     caption VARCHAR(1000),
-    PRIMARY KEY (id),
+    PRIMARY KEY (id)
 );
 
 /* CREATE TABLE likes (

@@ -7,33 +7,37 @@ const userInfo = document.querySelector('#user-info');
 const logOut = document.querySelector('#log-out');
 const main = document.querySelector('main');
 const loginForm = document.querySelector('#login-form');
-const addUserForm = document.querySelector('#add-user-form');
-const addForm = document.querySelector('#add-cat-form');
-const modForm = document.querySelector('#mod-cat-form');
+const addUserForm = document.querySelector('#addUserForm');
+const addForm = document.querySelector('#add-photo-form');
+const modForm = document.querySelector('#mod-photo-form');
 const ul = document.querySelector('ul');
 const userLists = document.querySelectorAll('.add-owner');
 const imageModal = document.querySelector('#image-modal');
 const modalImage = document.querySelector('#image-modal img');
 const close = document.querySelector('#image-modal a');
 
-// create cat cards
-const createCatCards = (cats) => {
+// create photo cards
+const createPhotoCards = (photos) => {
   // clear ul
   ul.innerHTML = '';
-  cats.forEach((cat) => {
+  photos.forEach((photo) => {
     // create li with DOM methods
+
+    console.log(photo);
+
     const img = document.createElement('img');
-    img.src = url + '/thumbnails/' + cat.filename;
-    img.alt = cat.name;
+    //img.src = url + '/thumbnails/' + photo.filename;
+    img.src = url + '/' + photo.filename;
+    img.alt = photo.id;
     img.classList.add('resp');
 
     // open large image when clicking image
     img.addEventListener('click', () => {
-      modalImage.src = url + '/' + cat.filename;
-      imageModal.alt = cat.name;
+      modalImage.src = url + '/' + photo.filename;
+      imageModal.alt = photo.id;
       imageModal.classList.toggle('hide');
       try {
-        const coords = JSON.parse(cat.coords);
+        const coords = JSON.parse(photo.coords);
         // console.log(coords);
         addMarker(coords);
       }
@@ -41,34 +45,40 @@ const createCatCards = (cats) => {
       }
     });
 
+
     const figure = document.createElement('figure').appendChild(img);
 
-    const h2 = document.createElement('h2');
+    /*const h2 = document.createElement('h2');
     h2.innerHTML = cat.name;
+     */
 
     const p1 = document.createElement('p');
-    p1.innerHTML = `Age: ${cat.age}`;
+    p1.innerHTML = `User: ${photo.owner}`;
 
     const p2 = document.createElement('p');
-    p2.innerHTML = `Weight: ${cat.weight}kg`;
+    p2.innerHTML = `Caption: ${photo.caption}`;
 
-    const p3 = document.createElement('p');
+    /*const p3 = document.createElement('p');
     p3.innerHTML = `Owner: ${cat.ownername}`;
 
-    // add selected cat's values to modify form
+     */
+    
+      // add selected photo's values to modify form
     const modButton = document.createElement('button');
+    modButton.className = 'light-border';
     modButton.innerHTML = 'Modify';
     modButton.addEventListener('click', () => {
       const inputs = modForm.querySelectorAll('input');
-      inputs[0].value = cat.name;
-      inputs[1].value = cat.age;
-      inputs[2].value = cat.weight;
-      inputs[3].value = cat.cat_id;
-      modForm.querySelector('select').value = cat.owner;
+      inputs[0].value = photo.ownername;
+      inputs[1].value = photo.caption;
+      inputs[2].value = photo.id;
+      //inputs[3].value = photo.id;
+      //modForm.querySelector('select').value = photo.owner;
     });
 
     // delete selected cat
     const delButton = document.createElement('button');
+    delButton.className = 'light-border';
     delButton.innerHTML = 'Delete';
     delButton.addEventListener('click', async () => {
       const fetchOptions = {
@@ -78,26 +88,31 @@ const createCatCards = (cats) => {
         },
       };
       try {
-        const response = await fetch(url + '/cat/' + cat.cat_id, fetchOptions);
+        const response = await fetch(url + '/photo/' + photo.id, fetchOptions);
         const json = await response.json();
         console.log('delete response', json);
-        getCat();
+        getPhoto();
       }
       catch (e) {
-        console.log(e.message());
+        console.log(e.message);
       }
     });
 
+
+     
+  
     const li = document.createElement('li');
     li.classList.add('light-border');
 
-    li.appendChild(h2);
+    //li.appendChild(h2);
     li.appendChild(figure);
     li.appendChild(p1);
     li.appendChild(p2);
-    li.appendChild(p3);
+    //li.appendChild(p3);
+    if (photo.editable) {
     li.appendChild(modButton);
     li.appendChild(delButton);
+    }
     ul.appendChild(li);
   });
 };
@@ -110,17 +125,17 @@ close.addEventListener('click', (evt) => {
 
 // AJAX call
 
-const getCat = async () => {
-  console.log('getCat token ', sessionStorage.getItem('token'));
+const getPhoto = async () => {
+  console.log('getPhoto token ', sessionStorage.getItem('token'));
   try {
     const options = {
       headers: {
         'Authorization': 'Bearer ' + sessionStorage.getItem('token'),
       },
     };
-    const response = await fetch(url + '/cat', options);
-    const cats = await response.json();
-    createCatCards(cats);
+    const response = await fetch(url + '/photo', options);
+    const photos = await response.json();
+    createPhotoCards(photos);
   }
   catch (e) {
     console.log(e.message);
@@ -135,7 +150,7 @@ const createUserOptions = (users) => {
     users.forEach((user) => {
       // create options with DOM methods
       const option = document.createElement('option');
-      option.value = user.user_id;
+      option.value = user.id;
       option.innerHTML = user.name;
       option.classList.add('light-border');
       list.appendChild(option);
@@ -160,7 +175,7 @@ const getUsers = async () => {
   }
 };
 
-// submit add cat form
+// submit add photo form
 addForm.addEventListener('submit', async (evt) => {
   evt.preventDefault();
   const fd = new FormData(addForm);
@@ -171,15 +186,16 @@ addForm.addEventListener('submit', async (evt) => {
     },
     body: fd,
   };
-  const response = await fetch(url + '/cat', fetchOptions);
+  const response = await fetch(url + '/photo', fetchOptions);
   const json = await response.json();
   console.log('add response', json);
-  getCat();
+  getPhoto();
 });
 
 // submit modify form
 modForm.addEventListener('submit', async (evt) => {
   evt.preventDefault();
+
   const data = serializeJson(modForm);
   const fetchOptions = {
     method: 'PUT',
@@ -191,10 +207,10 @@ modForm.addEventListener('submit', async (evt) => {
   };
 
   console.log(fetchOptions);
-  const response = await fetch(url + '/cat', fetchOptions);
+  const response = await fetch(url + '/photo', fetchOptions);
   const json = await response.json();
   console.log('modify response', json);
-  getCat();
+  getPhoto();
 });
 
 // login
@@ -217,15 +233,29 @@ loginForm.addEventListener('submit', async (evt) => {
   } else {
     // save token
     sessionStorage.setItem('token', json.token);
-    // show/hide forms + cats
+    sessionStorage.setItem('user', JSON.stringify(json.user));
+    // show/hide forms + photos
     loginWrapper.style.display = 'none';
     logOut.style.display = 'block';
     main.style.display = 'block';
-    userInfo.innerHTML = `Hello ${json.user.name}`;
-    getCat();
+    setUser();
+    getPhoto();
     getUsers();
   }
 });
+
+const setUser = () => {
+  try {
+    const user = JSON.parse(sessionStorage.getItem('user'))
+    userInfo.innerHTML = `${user.name} <img src="${url}/${user.avatar}">`;
+
+  } catch(e) {
+
+  }
+
+}
+
+setUser();
 
 // logout
 logOut.addEventListener('click', async (evt) => {
@@ -242,7 +272,7 @@ logOut.addEventListener('click', async (evt) => {
     // remove token
     sessionStorage.removeItem('token');
     alert('You have logged out');
-    // show/hide forms + cats
+    // show/hide forms + photos
     loginWrapper.style.display = 'flex';
     logOut.style.display = 'none';
     main.style.display = 'none';
@@ -268,12 +298,12 @@ addUserForm.addEventListener('submit', async (evt) => {
   console.log('user add response', json);
   // save token
   sessionStorage.setItem('token', json.token);
-  // show/hide forms + cats
+  // show/hide forms + photos
   loginWrapper.style.display = 'none';
   logOut.style.display = 'block';
   main.style.display = 'block';
-  userInfo.innerHTML = `Hello ${json.user.name}`;
-  getCat();
+  userInfo.innerHTML = `${json.user.name}`;
+  getPhoto();
   getUsers();
 });
 
@@ -282,6 +312,6 @@ if (sessionStorage.getItem('token')) {
   loginWrapper.style.display = 'none';
   logOut.style.display = 'block';
   main.style.display = 'block';
-  getCat();
+  getPhoto();
   getUsers();
 }

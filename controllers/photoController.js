@@ -4,7 +4,8 @@ const photoModel = require('../models/photoModel');
 const photos = photoModel.photos;
 
 const photo_list_get = async (req, res) => {
-    const photos = await photoModel.getAllPhotos();
+    console.log('rivi 7', req.user)
+    const photos = await photoModel.getAllPhotos(req.user.id);
     res.json(photos);
 };
 
@@ -35,11 +36,11 @@ const photo_put = async (req, res) => {
     console.log('photo_put', req.body);
     const upPhoto = await photoModel.updatePhoto(req.body);
     console.log('photo_put result from db', upPhoto);
-    res.status(204).send();
+    res.status(200).json({ message: 'OK' });
 };
 
 const photo_delete = async (req, res) => {
-    console.log('photo_put', req.parms);
+    console.log('photo_put', req.params);
     const delPhoto = await photoModel.deletePhoto(req.params.id);
     console.log('photo_delete result from db', delPhoto);
     res.json({ deleted: 'OK' });
