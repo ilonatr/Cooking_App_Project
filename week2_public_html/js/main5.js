@@ -58,10 +58,10 @@ const createPhotoCards = (photos) => {
     const p2 = document.createElement('p');
     p2.innerHTML = `Caption: ${photo.caption}`;
 
-    /*const p3 = document.createElement('p');
-    p3.innerHTML = `Owner: ${cat.ownername}`;
+    //const avatar = document.createElement('figure').appendChild(img);;
+    //avatar.innerHTML = `Owner: ${user.avatar}`;
 
-     */
+     
     
       // add selected photo's values to modify form
     const modButton = document.createElement('button');
@@ -72,7 +72,6 @@ const createPhotoCards = (photos) => {
       inputs[0].value = photo.ownername;
       inputs[1].value = photo.caption;
       inputs[2].value = photo.id;
-      //inputs[3].value = photo.id;
       //modForm.querySelector('select').value = photo.owner;
     });
 
@@ -108,7 +107,7 @@ const createPhotoCards = (photos) => {
     li.appendChild(figure);
     li.appendChild(p1);
     li.appendChild(p2);
-    //li.appendChild(p3);
+    //li.appendChild(avatar);
     if (photo.editable) {
     li.appendChild(modButton);
     li.appendChild(delButton);
