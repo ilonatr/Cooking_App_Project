@@ -53,7 +53,7 @@ const createPhotoCards = (photos) => {
      */
 
     const p1 = document.createElement('p');
-    p1.innerHTML = `User: ${photo.owner}`;
+    p1.innerHTML = `User: ${photo.ownername}`;
 
     const p2 = document.createElement('p');
     p2.innerHTML = `Caption: ${photo.caption}`;
@@ -76,7 +76,7 @@ const createPhotoCards = (photos) => {
       //modForm.querySelector('select').value = photo.owner;
     });
 
-    // delete selected cat
+    // delete selected photo
     const delButton = document.createElement('button');
     delButton.className = 'light-border';
     delButton.innerHTML = 'Delete';
