@@ -9,7 +9,7 @@ const main = document.querySelector('main');
 const loginForm = document.querySelector('#login-form');
 const addUserForm = document.querySelector('#addUserForm');
 const addForm = document.querySelector('#add-photo-form');
-const modForm = document.querySelector('#mod-photo-form');
+const ediForm = document.querySelector('#edit-photo-form');
 const ul = document.querySelector('ul');
 const userLists = document.querySelectorAll('.add-owner');
 const imageModal = document.querySelector('#image-modal');
@@ -45,7 +45,6 @@ const createPhotoCards = (photos) => {
       }
     });
 
-
     const figure = document.createElement('figure').appendChild(img);
 
     /*const h2 = document.createElement('h2');
@@ -53,26 +52,27 @@ const createPhotoCards = (photos) => {
      */
 
     const p1 = document.createElement('p');
-    p1.innerHTML = `User: ${photo.ownername}`;
+    p1.innerHTML = `From: ${photo.ownername}`;
 
     const p2 = document.createElement('p');
-    p2.innerHTML = `Caption: ${photo.caption}`;
+    p2.innerHTML = `${photo.caption}`;
 
-    //const avatar = document.createElement('figure').appendChild(img);;
-    //avatar.innerHTML = `Owner: ${user.avatar}`;
+    /*const p3 = document.createElement('p');
+    p3.innerHTML = `Owner: ${cat.ownername}`;
 
-     
+     */
     
       // add selected photo's values to modify form
-    const modButton = document.createElement('button');
-    modButton.className = 'light-border';
-    modButton.innerHTML = 'Modify';
-    modButton.addEventListener('click', () => {
-      const inputs = modForm.querySelectorAll('input');
-      inputs[0].value = photo.ownername;
-      inputs[1].value = photo.caption;
-      inputs[2].value = photo.id;
-      //modForm.querySelector('select').value = photo.owner;
+    const editButton = document.createElement('button');
+    editButton.className = 'light-border';
+    editButton.innerHTML = 'Edit';
+    editButton.addEventListener('click', () => {
+      const inputs = ediForm.querySelectorAll('input');
+      //inputs[0].value = photo.ownername;
+      inputs[0].value = photo.caption;
+      inputs[1].value = photo.id;
+      //ediForm.querySelector('select').value = photo.owner;
+      scrollToTop();
     });
 
     // delete selected photo
@@ -107,14 +107,52 @@ const createPhotoCards = (photos) => {
     li.appendChild(figure);
     li.appendChild(p1);
     li.appendChild(p2);
-    //li.appendChild(avatar);
+    //li.appendChild(p3);
     if (photo.editable) {
-    li.appendChild(modButton);
+    li.appendChild(editButton);
     li.appendChild(delButton);
     }
     ul.appendChild(li);
   });
 };
+
+// progress bar as a hr
+    /*let bar = document.querySelector('.progress-bar');
+    window.addEventListener('scroll', () => {
+        let max = document.body.scrollHeight - innerHeight;
+        bar.style.width = `${(pageYOffset / max) * 100}%`;
+    });*/
+
+    const mybutton = document.getElementById('top-button');
+
+    //appears to the bottom if scrolled down to 500px 
+    const scrollFunc = () => {
+      if (document.body.scrollTop > 500 || document.documentElement.scrollTop > 500) {
+        mybutton.style.display = 'block';
+      } else {
+        mybutton.style.display = 'none';
+      }
+    };
+    
+    window.addEventListener('scroll', scrollFunc);
+    
+    const scrollToTop = () => {
+
+      const c = document.documentElement.scrollTop || document.body.scrollTop;
+      if (c > 0) {
+        window.requestAnimationFrame(scrollToTop);
+        // scrollTotop takes x and a y coordinates
+        // increases the '10' value to get a smoother scroll
+        window.scrollTo(0, c - c / 10);
+      }
+    };
+    
+    //when the button is clicked, runs scrollToTop function
+    mybutton.onclick = function(e) {
+      e.preventDefault();
+      scrollToTop();
+    }    
+
 
 // close modal
 close.addEventListener('click', (evt) => {
@@ -192,10 +230,10 @@ addForm.addEventListener('submit', async (evt) => {
 });
 
 // submit modify form
-modForm.addEventListener('submit', async (evt) => {
+ediForm.addEventListener('submit', async (evt) => {
   evt.preventDefault();
 
-  const data = serializeJson(modForm);
+  const data = serializeJson(ediForm);
   const fetchOptions = {
     method: 'PUT',
     headers: {
