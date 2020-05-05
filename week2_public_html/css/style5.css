@@ -258,3 +258,15 @@ img{
 #textarea{
   font-family: Manrope;
 }
+
+a:link, a:visited {
+  color: darkcyan;
+}
+
+a:hover, a:active {
+  color: cornflowerblue;
+}
+
+button:hover {
+  background-color: lightblue
+}
