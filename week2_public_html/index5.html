@@ -4,6 +4,24 @@
   <meta charset="utf8">
   <title>Example</title>
   <link href="https://api.tiles.mapbox.com/mapbox-gl-js/v1.5.0/mapbox-gl.css" rel="stylesheet"/>
+  <script src="https://cdn.tiny.cloud/1/tyouvrkjj0rlhiu9mzsqiwme0eaukguyfasal246f61vbg6n/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+
+  <script>
+    tinymce.init({
+      selector: '#textarea',
+      toolbar: false,
+      menubar: false,
+      statusbar: false,
+      content_style: 'body { font-size: 13px }',
+      allow_conditional_comments: true,
+      setup: function (editor) {
+        editor.on('change', function () {
+            editor.save();
+        });
+      }
+    });
+  </script>
+
   <link href='https://fonts.googleapis.com/css?family=Manrope' rel='stylesheet'>
   <link href='https://fonts.googleapis.com/css?family=East Sea Dokdo' rel='stylesheet'>
   <link href="./css/style5.css" rel="stylesheet">
@@ -45,20 +63,20 @@
     </div>
     </div>
   </div>
-    <p id="user-info"></p>
     <button id="log-out" class="light-border" style="display: none;">Logout</button>
   <main style="display: none">
     <!--<h1>List of photos</h1>-->
     <!--hr-->
     
     <div class="maincontainer">
-    <div class="forms">
+      <p id="user-info"></p>
+      <div class="forms">
       <div class="form-wrapper">
         <h3>Add photo</h3>
         <form class="light-border" enctype="multipart/form-data" id="add-photo-form">
           <input class="light-border" type="file" name="photo" accept="image/*" placeholder="Choose file">
           <select class="light-border add-owner" name="owner" required></select>
-          <input class="light-border" type="text" name="caption" placeholder="Caption" required>
+          <textarea id="textarea" class="light-border" rows="5" type="textarea" name="caption" placeholder="Caption" required></textarea>
           <button class="light-border" type="submit">Upload</button>
         </form>
       </div>
@@ -67,7 +85,7 @@
         <h3>Edit caption</h3>
         <form id="edit-photo-form" class="light-border">
           <!--input class="light-border" type="text" name="name" placeholder="Name" required-->
-          <input class="light-border" type="text" name="caption" placeholder="Caption" required>
+          <textarea id="textarea" class="light-border" rows="5" type="textarea" name="caption" placeholder="Caption" required></textarea>
           <input type="hidden" name="id">
           <button class="light-border" type="submit">Save</button>
         </form>
@@ -90,7 +108,7 @@
 <div class="hide modal" id="image-modal">
   <a href="#" class="close">Close</a>
   <img src="" alt="">
-  <!--<div id="map"></div>-->
+  <div id="map"></div>
 </div>
 <script src="./js/serialize.js"></script>
 <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v1.5.0/mapbox-gl.js"></script>

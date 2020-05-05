@@ -9,7 +9,7 @@ const getAllPhotos = async (uid) => {
       if (uid == row.user_id) {
         row.editable = true
       }
-     })
+     });
 
     return rows;
   } catch (e) {
@@ -29,7 +29,7 @@ const getPhoto = async (id) => {
 const insertPhoto = async (photo) => {
   try {
     console.log('insert photo?', photo);
-    const [rows] = await promisePool.query('INSERT INTO photo (filename, owner, caption) VALUES (?, ?, ?)', [ photo.filename, photo.owner, photo.caption]);
+    const [rows] = await promisePool.execute('INSERT INTO photo (filename, owner, caption, coords) VALUES (?, ?, ?, ?)', photo);
     return rows;
   } catch (e) {
     console.error('error', e.message);
@@ -55,7 +55,7 @@ const deletePhoto = async (id) => {
   } catch (e) {
     console.error('deletePhoto model', e.message);
   }
-}
+};
 
 module.exports = {
   getAllPhotos,

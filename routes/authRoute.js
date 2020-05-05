@@ -17,7 +17,6 @@ router.post('/register', upload.single('avatar'),
         //sanitizeBody('name').escape(),
     ],
     authController.user_create_post,
-    authController.login,
 );
 
 module.exports = router;

@@ -46,6 +46,7 @@ const createPhotoCards = (photos) => {
     });
 
     const figure = document.createElement('figure').appendChild(img);
+    
 
     /*const h2 = document.createElement('h2');
     h2.innerHTML = cat.name;
@@ -57,21 +58,15 @@ const createPhotoCards = (photos) => {
     const p2 = document.createElement('p');
     p2.innerHTML = `${photo.caption}`;
 
-    /*const p3 = document.createElement('p');
-    p3.innerHTML = `Owner: ${cat.ownername}`;
-
-     */
-    
       // add selected photo's values to modify form
     const editButton = document.createElement('button');
     editButton.className = 'light-border';
     editButton.innerHTML = 'Edit';
     editButton.addEventListener('click', () => {
-      const inputs = ediForm.querySelectorAll('input');
-      //inputs[0].value = photo.ownername;
-      inputs[0].value = photo.caption;
-      inputs[1].value = photo.id;
-      //ediForm.querySelector('select').value = photo.owner;
+      const inputs = ediForm.querySelector('input');
+      const texarea = ediForm.querySelector('textarea');
+      texarea.value = photo.caption;
+      inputs.value = photo.id;
       scrollToTop();
     });
 
@@ -283,14 +278,14 @@ loginForm.addEventListener('submit', async (evt) => {
 
 const setUser = () => {
   try {
-    const user = JSON.parse(sessionStorage.getItem('user'))
+    const user = JSON.parse(sessionStorage.getItem('user'));
     userInfo.innerHTML = `${user.name} <img src="${url}/${user.avatar}">`;
 
   } catch(e) {
 
   }
 
-}
+};
 
 setUser();
 
@@ -322,26 +317,16 @@ logOut.addEventListener('click', async (evt) => {
 // submit register form
 addUserForm.addEventListener('submit', async (evt) => {
   evt.preventDefault();
-  const data = serializeJson(addUserForm);
+  const data = new FormData(addUserForm);
   const fetchOptions = {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(data),
+    body: data,
   };
   const response = await fetch(url + '/auth/register', fetchOptions);
   const json = await response.json();
   console.log('user add response', json);
-  // save token
-  sessionStorage.setItem('token', json.token);
-  // show/hide forms + photos
-  loginWrapper.style.display = 'none';
-  logOut.style.display = 'block';
-  main.style.display = 'block';
-  userInfo.innerHTML = `${json.user.name}`;
-  getPhoto();
-  getUsers();
+  //mitä haluan että tapahtuu rekisteröinnin jälkeen
+  alert('Rekisteröinti ok');
 });
 
 // when app starts, check if token exists and hide login form, show logout button and main content, get cats and users

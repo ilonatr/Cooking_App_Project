@@ -54,7 +54,7 @@ const user_create_post = async (req, res, next) => {
         ];
 
         if (await userModel.insertUser(params)) {
-            next();
+            res.status(400).json({message: 'user added'});
         } else {
             res.status(400).json({error: 'register error'});
         }

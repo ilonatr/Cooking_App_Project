@@ -15,6 +15,7 @@ app.use(express.json()); // for parsing application/json
 app.use(express.urlencoded({extended: true})); // for parsing application/x-www-form-urlencoded
 app.use(express.static('public'));
 app.use(express.static('uploads'));
+app.use('/thumbnails', express.static('thumbnails'));
 
 app.use('/auth', authRoute);
 app.use('/photo', passport.authenticate('jwt', {session: false}), photoRoute); //passport.authenticate('jwt', {session: false}),
